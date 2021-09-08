@@ -1,0 +1,9 @@
+*.weights
+*.avi
+openpose/build/*
+openpose/models/*
+yolov4_darknet/build/*
+yolov4_darknet/coco/*
+yolov4_darknet/build_release/*
+yolov4_darknet/cmake-build-debug/*
+.idea

@@ -1,0 +1,50 @@
+/snap/clion/163/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/kyra/openpose/examples/tutorial_api_cpp
+CMake Warning (dev) in CMakeLists.txt:
+  No project() command is present.  The top-level CMakeLists.txt file must
+  contain a literal, direct call to the project() command.  Add a line of
+  code such as
+
+    project(ProjectName)
+
+  near the top of the file, but after cmake_minimum_required().
+
+  CMake is pretending there is a "project(Project)" command on the first
+  line.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Error at CMakeLists.txt:22 (include):
+  include could not find requested file:
+
+    /home/kyra/openpose/examples/tutorial_api_cpp/cmake/Utils.cmake
+
+
+-- Adding Example 01_body_from_image_default.bin
+-- Adding Example 02_whole_body_from_image_default.bin
+-- Adding Example 03_keypoints_from_image.bin
+-- Adding Example 04_keypoints_from_images.bin
+-- Adding Example 05_keypoints_from_images_multi_gpu.bin
+-- Adding Example 06_face_from_image.bin
+-- Adding Example 07_hand_from_image.bin
+-- Adding Example 08_heatmaps_from_image.bin
+-- Adding Example 09_keypoints_from_heatmaps.bin
+-- Adding Example 10_asynchronous_custom_input.bin
+-- Adding Example 11_asynchronous_custom_input_multi_camera.bin
+-- Adding Example 12_asynchronous_custom_output.bin
+-- Adding Example 13_asynchronous_custom_input_output_and_datum.bin
+-- Adding Example 14_synchronous_custom_input.bin
+-- Adding Example 15_synchronous_custom_preprocessing.bin
+-- Adding Example 16_synchronous_custom_postprocessing.bin
+-- Adding Example 17_synchronous_custom_output.bin
+-- Adding Example 18_synchronous_custom_all_and_datum.bin
+CMake Warning (dev) in CMakeLists.txt:
+  No cmake_minimum_required command is present.  A line of code such as
+
+    cmake_minimum_required(VERSION 3.20)
+
+  should be added at the top of the file.  The version specified may be lower
+  if you wish to support older CMake versions for this project.  For more
+  information run "cmake --help-policy CMP0000".
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring incomplete, errors occurred!
+See also "/home/kyra/openpose/examples/tutorial_api_cpp/cmake-build-debug/CMakeFiles/CMakeOutput.log".
