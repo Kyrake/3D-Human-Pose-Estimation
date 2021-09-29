@@ -1,4 +1,4 @@
-/snap/clion/163/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/kyra/openpose/examples/tutorial_api_cpp
+/snap/clion/163/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/kyra/HAR_Framework/openpose/examples/tutorial_api_cpp
 CMake Warning (dev) in CMakeLists.txt:
   No project() command is present.  The top-level CMakeLists.txt file must
   contain a literal, direct call to the project() command.  Add a line of
@@ -12,10 +12,22 @@ CMake Warning (dev) in CMakeLists.txt:
   line.
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
+-- The C compiler identification is GNU 7.5.0
+-- The CXX compiler identification is GNU 7.5.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 CMake Error at CMakeLists.txt:22 (include):
   include could not find requested file:
 
-    /home/kyra/openpose/examples/tutorial_api_cpp/cmake/Utils.cmake
+    /home/kyra/HAR_Framework/openpose/examples/tutorial_api_cpp/cmake/Utils.cmake
 
 
 -- Adding Example 01_body_from_image_default.bin
@@ -47,4 +59,4 @@ CMake Warning (dev) in CMakeLists.txt:
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- Configuring incomplete, errors occurred!
-See also "/home/kyra/openpose/examples/tutorial_api_cpp/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/home/kyra/HAR_Framework/openpose/examples/tutorial_api_cpp/cmake-build-debug/CMakeFiles/CMakeOutput.log".

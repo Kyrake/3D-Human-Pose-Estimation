@@ -215,17 +215,66 @@ void openposeTracking(op::Wrapper &opWrapper, cv::Mat frame) {
         auto successfullyEmplaced = opWrapper.waitAndEmplace(datumsPtr);
         if (!successfullyEmplaced)
             op::opLog("Processed datum could not be emplaced.", op::Priority::High);
+        if (datumsPtr != nullptr && !datumsPtr->empty())
+        {
+            op::opLog("\nKeypoints:");
+            // Accesing each element of the keypoints
+            const auto& poseKeypoints = datumsPtr->at(0)->poseKeypoints;
+            op::opLog("Person pose keypoints:");
+            for (auto person = 0 ; person < poseKeypoints.getSize(0) ; person++)
+            {
+                op::opLog("Person " + std::to_string(person) + " (x, y, score):");
+                for (auto bodyPart = 0 ; bodyPart < poseKeypoints.getSize(1) ; bodyPart++)
+                {
+                    std::string valueToPrint;
+                    for (auto xyscore = 0 ; xyscore < poseKeypoints.getSize(2) ; xyscore++)
+                    {
+                        valueToPrint += std::to_string(   poseKeypoints[{person, bodyPart, xyscore}]   ) + " ";
+                    }
+                    op::opLog(valueToPrint);
+                }
+            }
+            op::opLog(" ");
+            // Alternative: just getting std::string equivalent
+            op::opLog("Face keypoints: " + datumsPtr->at(0)->faceKeypoints.toString(), op::Priority::High);
+            op::opLog("Left hand keypoints: " + datumsPtr->at(0)->handKeypoints[0].toString(), op::Priority::High);
+            op::opLog("Right hand keypoints: " + datumsPtr->at(0)->handKeypoints[1].toString(), op::Priority::High);
+            // Heatmaps
+            const auto& poseHeatMaps = datumsPtr->at(0)->poseHeatMaps;
+            if (!poseHeatMaps.empty())
+            {
+                op::opLog("Pose heatmaps size: [" + std::to_string(poseHeatMaps.getSize(0)) + ", "
+                          + std::to_string(poseHeatMaps.getSize(1)) + ", "
+                          + std::to_string(poseHeatMaps.getSize(2)) + "]");
+                const auto& faceHeatMaps = datumsPtr->at(0)->faceHeatMaps;
+                op::opLog("Face heatmaps size: [" + std::to_string(faceHeatMaps.getSize(0)) + ", "
+                          + std::to_string(faceHeatMaps.getSize(1)) + ", "
+                          + std::to_string(faceHeatMaps.getSize(2)) + ", "
+                          + std::to_string(faceHeatMaps.getSize(3)) + "]");
+                const auto& handHeatMaps = datumsPtr->at(0)->handHeatMaps;
+                op::opLog("Left hand heatmaps size: [" + std::to_string(handHeatMaps[0].getSize(0)) + ", "
+                          + std::to_string(handHeatMaps[0].getSize(1)) + ", "
+                          + std::to_string(handHeatMaps[0].getSize(2)) + ", "
+                          + std::to_string(handHeatMaps[0].getSize(3)) + "]");
+                op::opLog("Right hand heatmaps size: [" + std::to_string(handHeatMaps[1].getSize(0)) + ", "
+                          + std::to_string(handHeatMaps[1].getSize(1)) + ", "
+                          + std::to_string(handHeatMaps[1].getSize(2)) + ", "
+                          + std::to_string(handHeatMaps[1].getSize(3)) + "]");
+            }
+        }
     }
 }
 
 void playVideo(network *net, image **alphabet,char **labels,  size_t classes, op::Wrapper &opWrapper) {
-    VideoCapture cap("rgb1628859159.avi");
+    //VideoCapture cap("rgb1628859159.avi");
+    VideoCapture cap("/home/kyra/HAR_Framework/openpose/rgb1628855851.avi");
     //CvCapture *cap = cvCreateFileCapture("/home/kyra/openpose/rgb1628855511.avi"q);
-
+    //cv::FileStorage fs2("/home/kyra/HAR_Framework/test_1631570220.yaml", FileStorage::READ);
     if (!cap.isOpened()) {
         cout << "Error opening video stream or file" << endl;
         return;
     }
+    int frameCount = 0;
     while (1) {
         Mat frame;
         // Capture frame-by-frame
@@ -239,23 +288,29 @@ void playVideo(network *net, image **alphabet,char **labels,  size_t classes, op
         imshow("Frame", crop);
         darknet(crop, net, alphabet,labels, classes);
 
-        openposeTracking(opWrapper, crop);
+        openposeTracking(opWrapper, frame);
+
+	// read depth from yaml file later 
+	//Mat depthMatrix;
+	//fs2["frame" + std::to_string(frameCount)] >> depthMatrix;
+	//cv::imshow("DEpth", depthMatrix);
+	
         // Press  ESC on keyboard to exit
-        cv::waitKey(10);
-//        char c = (char)cv::waitKey(0);
-//        std::cout << (int)c << std::endl;
-//        if (c == 27)
-//            break;
+        char key = cv::waitKey(100); // increase value if playback is too fast, decrease if too slow, press esc to stop
+	if (key == 27)
+            break;
 
-
+	frameCount++;
     }
     // When everything done, release the video capture object
     cap.release();
+    //fs2.release();
+
     // Closes all the frames
     destroyAllWindows();
 }
 
-void playFreenect(network *net, image **alphabet,char **labels,  size_t classes, op::Wrapper opWrapper){
+void playFreenect(network *net, image **alphabet,char **labels,  size_t classes, op::Wrapper &opWrapper){
     // Configure libfreenect
     libfreenect2::Freenect2 freenect2;
     libfreenect2::Freenect2Device *dev = 0;
@@ -274,22 +329,23 @@ void playFreenect(network *net, image **alphabet,char **labels,  size_t classes,
 
     libfreenect2::Registration *registration = new libfreenect2::Registration(dev->getIrCameraParams(),
                                                                               dev->getColorCameraParams());
-    libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4);
+    libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4);//, depth2rgb(1920, 1080 + 2, 4);
     unsigned char *rgbCopy = nullptr;
     unsigned char *depthCopy = nullptr;
     bool userWantsToExit = false;
+    vector<cv::Mat> depthLog;
 
     long frameCount = 0;
     //TODO ein array oder vector anlegen in dem die dpth data gepackt werden kann
 
     unsigned long t = (unsigned long) time(NULL);
 
-    VideoWriter video("rgb" + std::to_string(t) + ".avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 30,
+    VideoWriter video("rgb" + std::to_string(t) + ".avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 10,
                       Size(1920, 1080));
-    VideoWriter video1("depth" + std::to_string(t) + ".avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 30,
-                       Size(512, 424));
+    //VideoWriter video1("depth" + std::to_string(t) + ".avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 10,
+    //                   Size(512, 424), false);
 
-
+    cv::FileStorage fs("/home/kyra/HAR_Framework/test_" + std::to_string(t) + ".json" , cv::FileStorage::WRITE); // create FileStorage object
     // camera frame loop
     while (!userWantsToExit) {
         // Poll frame from freenect
@@ -301,7 +357,7 @@ void playFreenect(network *net, image **alphabet,char **labels,  size_t classes,
         libfreenect2::Frame *rgb = frames[libfreenect2::Frame::Color];
         libfreenect2::Frame *ir = frames[libfreenect2::Frame::Ir];
         libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
-        registration->apply(rgb, depth, &undistorted, &registered);
+        registration->apply(rgb, depth, &undistorted, &registered);//, true, &depth2rgb);
 
 
         // Extact image data fom frame
@@ -311,17 +367,33 @@ void playFreenect(network *net, image **alphabet,char **labels,  size_t classes,
         if (depthCopy != nullptr) delete[] depthCopy;
         rgbCopy = new unsigned char[frameDataSize];
         depthCopy = new unsigned char[frameDataSizeDepth];
-        std::copy(rgb->data, rgb->data + rgb->width * rgb->height * rgb->bytes_per_pixel, rgbCopy);
-        std::copy(depth->data, depth->data + depth->width * depth->height * depth->bytes_per_pixel, depthCopy);
+        std::copy(rgb->data, rgb->data + frameDataSize, rgbCopy);
+        std::copy(undistorted.data, undistorted.data + frameDataSizeDepth, depthCopy);
+        //std::copy(depth->data, depth->data + frameDataSizeDepth, depthCopy);
 
         //TODO analog depth->data kopieren und in das array speichern
+        //unsigned char* depthCopyForLog = new unsigned char[frameDataSizeDepth];
+	//std::copy(depth->data, depth->data + frameDataSizeDepth, depthCopyForLog);
+	//depthLog.push_back(depthCopyForLog);
 
         // Convert freenect frame to cv mat
         const cv::Mat cvInputData = cv::Mat(rgb->height, rgb->width, CV_8UC4, rgbCopy);
         cv::Mat inputConverted;
         cv::cvtColor(cvInputData, inputConverted, cv::COLOR_BGRA2BGR);
 
-        //const cv::Mat cvInputDepthData = cv::Mat(depth->height, depth->width, CV_8UC4, depthCopy);
+        cv::Mat cvInputDepthData = cv::Mat(depth->height, depth->width, CV_32FC1, depthCopy);
+        //cv::Mat cvInputDepthData;
+        //cv::Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(cvInputDepthData);
+	cvInputDepthData = cvInputDepthData / 4500.0f;
+        //cv::Mat cvInputDepthDataRgb;
+	//cv::cvtColor(cvInputDepthData, cvInputDepthDataRgb, cv::COLOR_GRAY2BGR);
+
+
+	cv::imshow("DEpth", cvInputDepthData);
+	fs << "frame" + std::to_string(frameCount) << cvInputDepthData;
+	//depthLog.push_back(cv::Mat(cvInputDepthData));
+
+
         video.write(inputConverted);
         //video1.write(cvInputDepthData);
 
@@ -351,10 +423,22 @@ void playFreenect(network *net, image **alphabet,char **labels,  size_t classes,
         // Cleanup
         listener.release(frames);
         inputConverted.release();
+	//cvInputDepthDataRgb.release();
+	cvInputDepthData.release();
         frameCount++;
+        //userWantsToExit = frameCount > 10;
+        char key = cv::waitKey(10);
+        userWantsToExit = key == 27;
     }
-
+    
+    //int i = 1;
+    //for (auto log : depthLog) {
+    //    fs << "frame" + std::to_string(i) << log;
+    //    i++;
+    //}
+    fs.release();
     video.release();
+    //video1.release();
     dev->stop();
     dev->close();
 }
@@ -378,9 +462,9 @@ int tutorialApiCpp() {
 //        static char *cfg_file = const_cast<char *>("/home/kyra/openpose_dev/yolov4_darknet/cfg/yolov4.cfg");
 //        static char *weight_file = const_cast<char *>("/home/kyra/openpose_dev/yolov4_darknet/yolov4.weights");
 //        static char *names_file = const_cast<char *>("/home/kyra/openpose_dev/yolov4_darknet/cfg/coco.names");
-        static char *cfg_file = const_cast<char *>("/home/kyra/HAR_framework/custom_yolo/custom-yolov4-detector.cfg");
-        static char *weight_file = const_cast<char *>("/home/kyra/HAR_framework/custom_yolo/custom-yolov4-detector_final.weights");
-        static char *names_file = const_cast<char *>("/home/kyra/HAR_framework/custom_yolo/obj.names");
+        static char *cfg_file = const_cast<char *>("/home/kyra/HAR_Framework/custom_yolo/custom-yolov4-detector.cfg");
+        static char *weight_file = const_cast<char *>("/home/kyra/HAR_Framework/custom_yolo/custom-yolov4-detector_final.weights");
+        static char *names_file = const_cast<char *>("/home/kyra/HAR_Framework/custom_yolo/obj.names");
 
         size_t classes = 0;
         image **alphabet = load_alphabet();
@@ -394,7 +478,7 @@ int tutorialApiCpp() {
 
         //playFreenect(net, alphabet, labels, classes, opWrapper);
         playVideo(net, alphabet, labels, classes, opWrapper);
-        //video1.release();
+
         op::opLog("Stopping thread(s)", op::Priority::High);
         opWrapper.stop();
 
