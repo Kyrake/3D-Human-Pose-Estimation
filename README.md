@@ -6,6 +6,7 @@ To this purpose a dataset containing two assembly tasks, carried out by three di
 The HAR framework is divided into two major implementation parts:
 * Recording, streaming and extraction of keypoints and objects (C++)
 * Machine Learning architectures, data preprocessing, analaysis and evaluation of results (Python)
+  
 A full report of the HAR framework can be found here: [Human Action Reconition Framework](https://github.com/Kyrake/3D-Human-Pose-Estimation/blob/main/report/Human_Action_Recognition.pdf)
 
 
