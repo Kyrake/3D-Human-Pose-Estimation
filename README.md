@@ -23,12 +23,25 @@ A full report of the HAR framework can be found here: [Human Action Reconition F
 
 ## Installation
 
-First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), aswell as [Darknet](https://github.com/pjreddie/darknet).
+The installation depends on wether the Kinect is used for recording or using realtime RGB-D streams or wether the framework operates solely on already recorded streams.
+For the later case, you can skip the setup of the Kinect. 
 
-### Dependencies
+### General Dependencies
 * Python3
 * tensorflow-gpu 1.13.0
 * opencv3
+
+### Kinect Setup
+For using the Ubuntu OS, install the Kinect driver [Freenect2]([https://github.com/CMU-Perceptual-Computing-Lab/openpose](https://github.com/OpenKinect/libfreenect2))
+
+### Key Point Detection Setup
+First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+
+### Obect Detection Setup 
+First install [Darknet](https://github.com/pjreddie/darknet).
+
+
+
 
 
   
