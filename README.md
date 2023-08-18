@@ -51,12 +51,12 @@ Once you have compiled the application you can run the application from the `ope
 `./../build/examples/tutorial_api_cpp/10_asynchronous_custom_input.bin --net_resolution "-1x128" --model_pose COCO`.
 The configurations for using already recorded videos or using the kinect directly can be changed  by changing the comments in the respective lines in the following function:
 
-'''
+```
     for(const string &text : list_test2){
             //playFreenect(net, alphabet, labels, classes, opWrapper);
             playVideo(net, alphabet, labels, classes, opWrapper, text);
         }
-'''
+```
 
 
   
