@@ -34,6 +34,7 @@ For the later case, you can skip the setup of the Kinect.
 * Python3
 * tensorflow-gpu 1.13.0
 * opencv3
+* cuda 11.6
 
 ### Kinect Setup
 For using the Ubuntu OS, install the Kinect driver [Freenect2](https://github.com/OpenKinect/libfreenect2)
