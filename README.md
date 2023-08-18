@@ -16,6 +16,11 @@ A full report of the HAR framework can be found here: [Human Action Reconition F
 - [License](#license)
 
 ## Introdcution
+
+<p align="center">
+<img src="report/Setup.png">
+</p>
+
 ## Installation
 ### Dependencies
 * Python3
