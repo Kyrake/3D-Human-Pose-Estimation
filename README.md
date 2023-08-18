@@ -38,7 +38,7 @@ For using the Ubuntu OS, install the Kinect driver [Freenect2](https://github.co
 First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 
 ### Obect Detection Setup 
-First install [Darknet](https://github.com/pjreddie/darknet).
+First install [Darknet](https://github.com/pjreddie/darknet)
 
 
 
