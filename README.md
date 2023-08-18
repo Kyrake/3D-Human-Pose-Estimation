@@ -22,8 +22,13 @@ A full report of the HAR framework can be found here: [Human Action Reconition F
 </p>
 
 ## Installation
+
+First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), aswell as [Darknet](https://github.com/pjreddie/darknet).
+
 ### Dependencies
 * Python3
 * tensorflow-gpu 1.13.0
 * opencv3
+
+
   
