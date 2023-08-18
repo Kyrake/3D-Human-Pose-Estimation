@@ -46,6 +46,11 @@ First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpos
 First install [Darknet](https://github.com/pjreddie/darknet)
 
 ### Building 
+Clone the repository and navigate to the folder `openpose`:
+```
+git clone https://github.com/Kyrake/3D-Human-Pose-Estimation
+cd 3D-Human-Pose-Estimation/openpose/
+```
 
 ### Running
 Once you have compiled the application you can run the application from the `openpose/examples/tutorial_api_cpp` folder with\
