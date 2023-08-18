@@ -2,7 +2,7 @@
 
 
 This human action recognition (HAR) framework is an implementation for the purpose of classifying actions carried out by a human during industrial assembly tasks, in order to assist human-robot interactions.
-To this purpose a dataset containing two assembly tasks were recorded, using a Kinect as RGB-D sensor. The RGB and depth information are used to determine the joint key points of human moevment, as well as the component objects during each frame. For the keypoint detection [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) is used and for the object detection [Darknet](https://github.com/pjreddie/darknet).
+To this purpose a dataset containing two assembly tasks were recorded, using a Kinect as RGB-D sensor. The RGB and depth information are used to determine the joint key points of human moevment, as well as the component objects during each frame. For the keypoint detection [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) is used and for the object detection [Darknet](https://github.com/pjreddie/darknet).\\
 A full report of the HAR framework can be found here: [Human Action Reconition Framework](https://github.com/Kyrake/3D-Human-Pose-Estimation/blob/main/report/Human_Action_Recognition.pdf)
 
 
