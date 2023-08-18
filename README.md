@@ -1,4 +1,4 @@
-# HAR_Framework
+# Human Action Recognition Framework
 
 
 This human action recognition (HAR) framework is an implementation for the purpose of classifying actions carried out by a human during industrial assembly tasks, in order to assist human-robot interactions.
