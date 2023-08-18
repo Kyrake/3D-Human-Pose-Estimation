@@ -10,3 +10,8 @@
 
 ## Introdcution
 ## Installation
+### Dependencies
+* Python3
+* tensorflow-gpu 1.13.0
+* opencv3
+  
