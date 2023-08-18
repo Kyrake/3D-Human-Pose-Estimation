@@ -40,7 +40,7 @@ For the later case, you can skip the setup of the Kinect.
 For using the Ubuntu OS, install the Kinect driver [Freenect2](https://github.com/OpenKinect/libfreenect2)
 
 ### Key Point Detection Setup
-First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) from source
 
 ### Object Detection Setup 
 First install [Darknet](https://github.com/pjreddie/darknet)
@@ -50,6 +50,11 @@ Clone the repository and navigate to the folder `openpose`:
 ```
 git clone https://github.com/Kyrake/3D-Human-Pose-Estimation
 cd 3D-Human-Pose-Estimation/openpose/
+```
+If not already done during Openpose Setup, create build directory:
+```
+mkdir build && cd build/
+make -j`nproc`
 ```
 
 ### Running
