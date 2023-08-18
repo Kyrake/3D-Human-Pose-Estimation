@@ -32,7 +32,7 @@ For the later case, you can skip the setup of the Kinect.
 * opencv3
 
 ### Kinect Setup
-For using the Ubuntu OS, install the Kinect driver [Freenect2]([https://github.com/CMU-Perceptual-Computing-Lab/openpose](https://github.com/OpenKinect/libfreenect2))
+For using the Ubuntu OS, install the Kinect driver [Freenect2](https://github.com/OpenKinect/libfreenect2)
 
 ### Key Point Detection Setup
 First install [Openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
